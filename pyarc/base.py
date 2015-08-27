@@ -41,8 +41,8 @@ class Signature(object):
 class ClientBase(object):
     def __init__(self, base_url, default_url_args = {}, default_query_args = {}, add_headers = {}, async = False):
         self.base_url = base_url.rstrip('/')
-        self.default_url_args = {}
-        self.default_query_args = {}
+        self.default_url_args = default_url_args
+        self.default_query_args = default_query_args
         self.headers = {
                         'Accept' : 'application/json',
                         'Content-type' : 'application/json'
@@ -70,8 +70,11 @@ class ClientBase(object):
         final_url_args.update(self._prepare_url_args(**url_args))
         final_query_args = self.default_query_args.copy()
         final_query_args.update(query_args)
-        return self.base_url + template.format(**final_url_args) \
-                + '?' + urllib.urlencode(final_query_args)
+        result = self.base_url + template.format(**final_url_args)
+        qs = urllib.urlencode(final_query_args)
+        if qs:
+            result += '?' + qs
+        return result
 
     def do_req(self, method, url_template, url_args = {}, query_args = {}, body = ''):
         url = self._prepare_url(url_template, url_args, query_args)
