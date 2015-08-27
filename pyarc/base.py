@@ -57,8 +57,8 @@ class ClientBase(object):
                         }
         self.headers.update(add_headers)
         if async:
-            from pyarc.backends.grequests_client import GRequestsClient
-            self.impl = GRequestsClient()
+            from pyarc.backends.erequests_client import ERequestsClient
+            self.impl = ERequestsClient()
         else:
             from pyarc.backends.requests_client import RequestsClient
             self.impl = RequestsClient()

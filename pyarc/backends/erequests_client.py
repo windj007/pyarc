@@ -32,7 +32,7 @@ _METHODS = {
             }
 
 
-class GRequestsClient(object):
+class ERequestsClient(object):
     def __init__(self):
         self.requests_to_send = []
         self.results = []
