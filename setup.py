@@ -17,7 +17,7 @@ setup(
     license = "BSD",
     keywords = "rest client",
     url = "http://packages.python.org/pyarc",
-    packages=['pyarc'],
+    packages=['pyarc', 'pyarc.backends'],
     long_description=read('README.md'),
     classifiers=[
         "Development Status :: 3 - Alpha",
