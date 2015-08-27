@@ -1,5 +1,5 @@
 import requests
-from nprestclient.base import RestException
+from pyarc.base import RestException
 
 
 _METHODS = {

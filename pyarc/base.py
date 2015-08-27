@@ -24,16 +24,8 @@ def format_timestamp(ts):
     return ts.isoformat()
 
 
-def convert_threat_level(val, orig_min = 0.0, orig_max = 1.0, out_min = 0.0, out_max = 5.0):
-    return (val - orig_min) * (out_max - out_min) / (orig_max - orig_min) + out_min
-
-
 def get_cur_time():
     return datetime.datetime.now(UTC)
-
-
-MASHAPE_PROXY_HEADER = 'X-Mashape-Proxy-Secret'
-MASHAPE_APP_KEY_HEADER = 'X-Mashape-Key'
 
 
 class Signature(object):

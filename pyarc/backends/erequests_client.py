@@ -1,6 +1,5 @@
-import logging
 import erequests
-from nprestclient.base import RestException
+from pyarc.base import RestException
 
 
 class ResultWrapper(object):
