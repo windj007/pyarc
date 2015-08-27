@@ -24,5 +24,5 @@ setup(
         "Topic :: Internet :: WWW/HTTP",
         "License :: OSI Approved :: BSD License",
     ],
-    requires = ['requests', 'requests', 'erequests']
+    requires = ['requests', 'requests', 'erequests', 'pytz']
 )
