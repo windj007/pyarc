@@ -48,12 +48,17 @@ class ClientBase(object):
                         'Content-type' : 'application/json'
                         }
         self.headers.update(add_headers)
-        if async:
+        self.async = async
+        if self.async:
             from pyarc.backends.erequests_client import ERequestsClient
             self.impl = ERequestsClient()
+            self.batch = self._async_batch
+            self.do_req = self._do_req_base
         else:
             from pyarc.backends.requests_client import RequestsClient
             self.impl = RequestsClient()
+            self.batch = self._batch_base
+            self.do_req = self._do_req_sync
 
     def _prepare_arg(self, arg):
         if isinstance(arg, unicode):
@@ -76,9 +81,12 @@ class ClientBase(object):
             result += '?' + qs
         return result
 
-    def do_req(self, method, url_template, url_args = {}, query_args = {}, body = ''):
+    def _do_req_base(self, method, url_template, url_args = {}, query_args = {}, body = ''):
         url = self._prepare_url(url_template, url_args, query_args)
         return self.impl.start_req(method, url, self.headers, body)
+
+    def _do_req_sync(self, method, url_template, url_args = {}, query_args = {}, body = ''):
+        return self._do_req_base(method, url_template, url_args, query_args, body).get()
 
     def get(self, url_template, url_args = {}, query_args = {}):
         return self.do_req('get', url_template, url_args, query_args)
@@ -95,7 +103,10 @@ class ClientBase(object):
     def wait_all_requests_completed(self):
         self.impl.wait_all_requests_completed()
 
-    def batch(self, signatures):
+    def _async_batch(self, signatures):
+        return [f.get() for f in self._batch_base(signatures)]
+
+    def _batch_base(self, signatures):
         futures = [s() for s in signatures]
         self.wait_all_requests_completed()
-        return [f.get() for f in futures]
+        return futures
