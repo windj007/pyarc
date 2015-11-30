@@ -39,7 +39,13 @@ class Signature(object):
 
 
 class ClientBase(object):
-    def __init__(self, base_url, default_url_args = {}, default_query_args = {}, add_headers = {}, async = False):
+    def __init__(self,
+                 base_url,
+                 default_url_args = {},
+                 default_query_args = {},
+                 add_headers = {},
+                 async = False,
+                 verify = False):
         self.base_url = base_url.rstrip('/')
         self.default_url_args = default_url_args
         self.default_query_args = default_query_args
@@ -51,12 +57,12 @@ class ClientBase(object):
         self.async = async
         if self.async:
             from pyarc.backends.erequests_client import ERequestsClient
-            self.impl = ERequestsClient()
+            self.impl = ERequestsClient(verify = verify)
             self.batch = self._async_batch
             self.do_req = self._do_req_base
         else:
             from pyarc.backends.requests_client import RequestsClient
-            self.impl = RequestsClient()
+            self.impl = RequestsClient(verify = verify)
             self.batch = self._batch_base
             self.do_req = self._do_req_sync
 

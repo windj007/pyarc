@@ -32,15 +32,19 @@ _METHODS = {
 
 
 class ERequestsClient(object):
-    def __init__(self):
+    def __init__(self, verify = None):
         self.requests_to_send = []
         self.results = []
+        self.verify = verify or False
 
     def start_req(self, method, prepared_url, headers, body = ''):
         method = method.lower()
         assert method in _METHODS, "Unknown method %s" % method
 
-        future = _METHODS[method](prepared_url, headers = headers, data = body)
+        future = _METHODS[method](prepared_url,
+                                  headers = headers,
+                                  data = body,
+                                  verify = self.verify)
         res = ResultWrapper(self, method, prepared_url)
         self.requests_to_send.append(future)
         self.results.append(res)
